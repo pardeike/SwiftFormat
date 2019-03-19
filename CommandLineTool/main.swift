@@ -73,4 +73,11 @@ CLI.print = { message, type in
     }
 }
 
-exit(CLI.run(in: FileManager.default.currentDirectoryPath).rawValue)
+// exit(CLI.run(in: FileManager.default.currentDirectoryPath).rawValue)
+
+DirectoryWatcher.watch(CommandLine.arguments[1], predicate: { $0.hasSuffix(".swift") }) { file in
+    sleep(1) // so Xcode see the change
+    _ = CLI.run(in: FileManager.default.currentDirectoryPath, with: ["swiftformat", file])
+}
+
+CFRunLoopRun()
